@@ -14,6 +14,7 @@ import java.awt.MouseInfo.*;
 Draw 2D lines on a plane by clicking the start and end points.
 
 To compile and run the program, enter these two lines in Terminal (mac OS X): 
+          javac Vector.java
           javac DrawingPlane.java
           java DrawingPlane
 */
