@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.ArrayList;
 /*
 * Simple vector class.
@@ -7,8 +8,9 @@ import java.util.ArrayList;
 class Vector {
 	public double length, dydx;
 	public double intercept;
-	public int[] direction, tail, tip, midpoint = new int[2];
-	public ArrayList<Integer[]> points = new ArrayList<Integer[]>();
+	public double[] midpoint;
+	public int[] direction, tail, tip = new int[2];
+	public List<Integer[]> points = new ArrayList<Integer[]>();
 
 	/*
 	* Constructor
@@ -18,7 +20,7 @@ class Vector {
 		int dy = y2 - y1;
 		this.tail = new int[] {x1, y1};
 		this.tip = new int [] {x2, y2};
-		this.midpoint = new int[] {dx/2, dy/2};
+		this.midpoint = new double[] {dx/2, dy/2};
 		this.direction = new int[] { dx, dy};
 		this.dydx = (dx != 0) ? dy / dx : 1000000;
 		this.intercept = this.midpoint[1] - ((double) this.dydx * this.midpoint[0]);
@@ -89,16 +91,8 @@ class Vector {
 	*/
 
 	public BufferedImage draw(BufferedImage bi, int color) {
-		int xlim = this.tail[0] + (int) this.length;
-		int ylim = this.tail[1] + (int) this.length;
-	    for (int i = 0; i < xlim; i++) {
-			for (int j = 0; j < ylim; j++) {
-				if (this.containsPoint(i,j)) {
-					if (i < bi.getWidth() && j < bi.getHeight()) {
-						bi.setRGB(i,j,color);
-					}
-				}
-			}
+		for (Integer[] point : points) {
+			bi.setRGB(point[0],point[1],color);
 		}
 		return bi;
 	}
@@ -114,6 +108,8 @@ class Vector {
 		    return 1;
 		} else if (y % x == 0) {
 				return x;
+		} else if (x % y == 0) {
+			return y;
 		} else {
 			int i = x - 1;
 			while (i >= 2) {
@@ -147,24 +143,48 @@ class Vector {
 	}
 
 	/*
-	* Fill the ArrayList, points, with the coordinates that compose this vector.
+	* Fill the ArrayList, points, with the coordinates that compose this vector using the Bresenham technique.
 	*/
-	public void populatePoints() {
-		int normalize = gcf(this.direction[0],this.direction[1]);
-		for (int i = 0; Math.abs(i) <= Math.abs(this.direction[0]) && this.points.size() < this.length;) {
-			for (int j = 0; Math.abs(j) <= Math.abs(this.direction[1]);) {
-				points.add(new Integer[] {this.tail[0] + i,this.tail[1] + j});
-				i += this.direction[0] != 0 ? this.direction[0]/normalize : 0;
-				j += this.direction[0] != 0 ? this.direction[1]/normalize : 1;
-			}
-		}
+	public void populatePoints() { 
+        int dx = Math.abs(this.direction[0]);
+        int dy = Math.abs(this.direction[1]);
+ 
+        int signOfx = this.tail[0] < this.tip[0] ? 1 : -1; 
+        int signOfy = this.tail[1] < this.tip[1] ? 1 : -1; 
+ 
+        int err = dx - dy;
+        int e2;
+
+        int x0 = this.tail[0];
+        int x1 = this.tip[0];
+        int y0 = this.tail[1];
+        int y1 = this.tip[1];
+ 
+        do {
+            points.add(new Integer[] {x0,y0});
+ 
+            e2 = 2 * err;
+
+            if (e2 > -dy) {
+                err = err - dy;
+                x0 = x0 + signOfx;
+            }
+ 
+            if (e2 < dx) {
+                err = err + dx;
+                y0 = y0 + signOfy;
+            }
+        } while (x0 != x1 && y0 != y1);                             
+
 		/**
-		* see the points printed
+		*  print the points
 		\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
-		* System.out.println(this.toString());
-		* for (Integer[] point : points) { 
-		* 	System.out.println(String.format("%d, %d",point[0],point[1]));
-		* }
+		*/
+		// System.out.println(this.toString());
+		// for (Integer[] point : points) { 
+		// 	System.out.println(String.format("%d, %d",point[0],point[1]));
+		// }
+		/**
 		/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\				  	 
 		*/
 	}
