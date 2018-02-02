@@ -35,7 +35,7 @@ class Vector {
 		return (this.direction[0] * v.direction[0]) + (this.direction[1] * v.direction[1]);
 	}
 
-	public double angleBetween(Vector v) {
+	public double angleBetween(Vector v) { 
 		return Math.round(Math.toDegrees(Math.acos(this.dotProduct(v) / (this.length * v.length))));
 	}
 
