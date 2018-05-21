@@ -126,7 +126,7 @@ class Vector {
 			int i = x - 1;
 			while (i >= 2) {
 				if (x % i == 0 && y % i == 0) {
-						return i;
+					return i;
 				}
 				i--;
 			}
@@ -158,47 +158,35 @@ class Vector {
 	* Fill the ArrayList, points, with the coordinates that compose this vector using the Bresenham technique.
 	*/
 	public void populatePoints() { 
-        int dx = Math.abs(this.direction[0]);
-        int dy = Math.abs(this.direction[1]);
- 
-        int signOfx = this.tail[0] < this.tip[0] ? 1 : -1; 
-        int signOfy = this.tail[1] < this.tip[1] ? 1 : -1; 
- 
-        int err = dx - dy;
-        int e2;
+		int dx = Math.abs(this.direction[0]);
+		int dy = Math.abs(this.direction[1]);
 
-        int x0 = this.tail[0];
-        int x1 = this.tip[0];
-        int y0 = this.tail[1];
-        int y1 = this.tip[1];
- 
-        do {
-            points.add(new Integer[] {x0,y0});
- 
-            e2 = 2 * err;
+		int signOfx = this.tail[0] < this.tip[0] ? 1 : -1; 
+		int signOfy = this.tail[1] < this.tip[1] ? 1 : -1; 
 
-            if (e2 > -dy) {
-                err = err - dy;
-                x0 = x0 + signOfx;
-            }
- 
-            if (e2 < dx) {
-                err = err + dx;
-                y0 = y0 + signOfy;
-            }
-        } while (x0 != x1 && y0 != y1);                             
+		int err = dx - dy;
+		int e2;
 
-		/**
-		* see the points printed
-		\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
-		*/
-		// System.out.println(this.toString());
-		// for (Integer[] point : points) { 
-		// 	System.out.println(String.format("%d, %d",point[0],point[1]));
-		// }
-		/**
-		/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\				  	 
-		*/
+		int x0 = this.tail[0];
+		int x1 = this.tip[0];
+		int y0 = this.tail[1];
+		int y1 = this.tip[1];
+
+		do {
+		    points.add(new Integer[] {x0,y0});
+
+		    e2 = 2 * err;
+
+		    if (e2 > -dy) {
+			err = err - dy;
+			x0 = x0 + signOfx;
+		    }
+
+		    if (e2 < dx) {
+			err = err + dx;
+			y0 = y0 + signOfy;
+		    }
+		} while (x0 != x1 && y0 != y1);                             
 	}
 
 	/*
