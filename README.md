@@ -1,5 +1,4 @@
 # Vector
-Simple vector class.
 
 The GUI (shown below) called "Drawing Plane" is also available plz email!
 
